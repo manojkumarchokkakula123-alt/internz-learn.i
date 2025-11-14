@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternzLearn - IT Training & Internships</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        /* CSS remains unchanged from previous versions for brevity */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .admin-login-btn {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .admin-login-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        section {
+            padding: 4rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .courses {
+            background-color: white;
+        }
+        
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .course-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .course-img {
+            height: 200px;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .course-content {
+            padding: 1.5rem;
+        }
+        
+        .course-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .course-content p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .about {
+            background-color: var(--light);
+        }
+        
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-image {
+            flex: 1;
+            background-color: var(--secondary);
+            height: 400px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links ul li a:hover {
+            color: var(--secondary);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 2rem auto;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: modalFade 0.3s;
+        }
+        
+        @keyframes modalFade {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .form-tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .form-tab.active {
+            border-bottom-color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .quiz-step {
+            display: none;
+        }
+        
+        .quiz-step.active {
+            display: block;
+        }
+        
+        .question {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question:last-child {
+            border-bottom: none;
+        }
+        
+        .question h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .option.selected {
+            background-color: var(--light);
+            border-color: var(--secondary);
+        }
+        
+        .option input {
+            margin-right: 0.8rem;
+            pointer-events: none;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            background-color: #f5f5f5;
+            border-radius: 0 0 8px 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .quiz-progress {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .results {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .results h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 1rem 0;
+        }
+        
+        .admin-section {
+            background-color: var(--light);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .admin-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .admin-btn {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .admin-dashboard {
+            display: none;
+        }
+        
+        .dashboard-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+        }
+        
+        .dashboard-content {
+            padding: 2rem 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .data-table {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .table-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .logout-btn {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .admin-link-section {
+            background-color: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .admin-link-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .link-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .link-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+        }
+        
+        .copy-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* Admin Pages */
+        .admin-page {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .admin-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .admin-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        .admin-card-header {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .admin-card-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .admin-card-body {
+            padding: 2rem;
+        }
+        
+        .admin-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .admin-form .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .admin-form .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+        
+        .admin-form .btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .admin-links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        
+        .admin-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .admin-links a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        .back-to-home {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        
+        .back-to-home:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .link-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="mainWebsite">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">Internz<span>Learn</span></a>
+                    <nav>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#courses">Courses</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </nav>
+                    <div>
+                        <a href="#" class="admin-login-btn" id="adminLoginBtn">Admin Login</a>
+                        <a href="#" class="admin-login-btn" id="adminSignupBtn" style="margin-left: 10px; background-color: var(--success);">Admin Signup</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero" id="home">
+            <div class="container">
+                <h1>Advance Your IT Career with Expert Training</h1>
+                <p>Join thousands of students who have transformed their careers through our industry-focused IT training programs and internships.</p>
+                <a href="#" class="btn" id="quizBtn">Take Our Quiz</a>
+                <a href="#courses" class="btn btn-secondary">Explore Courses</a>
+            </div>
+        </section>
+
+        <section class="courses" id="courses">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Our Popular Courses</h2>
+                    <p>Choose from our wide range of IT courses designed to make you job-ready</p>
+                </div>
+                <div class="course-grid">
+                    <div class="course-card"> <div class="course-img">AI</div> <div class="course-content"> <h3>Artificial Intelligence</h3> <p>Master AI concepts, machine learning algorithms, and neural networks to build intelligent systems.</p> <a href="#" class="btn">Learn More</a> </div> </div>
+                    <div class="course-card"> <div class="course-img">DS</div> <div class="course-content"> <h3>Data Science</h3> <p>Learn data analysis, visualization, and predictive modeling with Python and R.</p> <a href="#" class="btn">Learn More</a> </div> </div>
+                    <div class="course-card"> <div class="course-img">WD</div> <div class="course-content"> <h3>Web Development</h3> <p>Build responsive websites and web applications using HTML, CSS, JavaScript and frameworks.</p> <a href="#" class="btn">Learn More</a> </div> </div>
+                    <div class="course-card"> <div class="course-img">CS</div> <div class="course-content"> <h3>Cyber Security</h3> <p>Protect systems and networks from digital attacks with ethical hacking and security protocols.</p> <a href="#" class="btn">Learn More</a> </div> </div>
+                    <div class="course-card"> <div class="course-img">PY</div> <div class="course-content"> <h3>Python Programming</h3> <p>From basics to advanced concepts, master one of the most versatile programming languages.</p> <a href="#" class="btn">Learn More</a> </div> </div>
+                    <div class="course-card"> <div class="course-img">IOT</div> <div class="course-content"> <h3>Internet of Things</h3> <p>Connect physical devices to the internet and build smart, automated systems.</p> <a href="#" class="btn">Learn More</a> </div> </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>About InternzLearn</h2>
+                        <p>InternzLearn is a premier IT training institute dedicated to bridging the gap between academic knowledge and industry requirements. We offer comprehensive training programs in cutting-edge technologies.</p>
+                        <p>Our mission is to empower students and professionals with the skills needed to excel in the rapidly evolving IT industry. With hands-on projects and industry-relevant curriculum, we ensure our students are job-ready.</p>
+                        <p>Join our community of learners and take the first step towards a successful IT career.</p>
+                        <a href="#contact" class="btn">Get In Touch</a>
+                    </div>
+                    <div class="about-image">
+                        InternzLearn Team
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Contact Us</h2>
+                    <p>Have questions? Reach out to our team for more information</p>
+                </div>
+                <div style="text-align: center;">
+                    <p>Email: info@internzlearn.com</p>
+                    <p>Phone: +1 (555) 123-4567</p>
+                    <p>Address: 123 Tech Street, Innovation City, IC 12345</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-about">
+                        <div class="footer-logo">Internz<span>Learn</span></div>
+                        <p>Transforming IT careers through quality education and hands-on training.</p>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#courses">Courses</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Courses</h3>
+                        <ul>
+                            <li><a href="#">Artificial Intelligence</a></li>
+                            <li><a href="#">Data Science</a></li>
+                            <li><a href="#">Web Development</a></li>
+                            <li><a href="#">Cyber Security</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h3>Connect</h3>
+                        <ul>
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">LinkedIn</a></li>
+                            <li><a href="#">Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>&copy; 2023 InternzLearn. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="admin-page" id="adminLoginPage">
+        <div class="admin-container">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h1>Admin Login</h1>
+                </div>
+                <div class="admin-card-body">
+                    <form class="admin-form" id="adminLoginForm">
+                        <div class="form-group">
+                            <label for="adminUsername">Username</label>
+                            <input type="text" id="adminUsername" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="adminPassword">Password</label>
+                            <input type="password" id="adminPassword" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                    <div class="admin-links">
+                        <p>Don't have an account? <a href="#" id="goToSignup">Create one here</a></p>
+                        <a href="#" class="back-to-home" id="backToHomeFromLogin">← Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-page" id="adminSignupPage">
+        <div class="admin-container">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h1>Create Admin Account</h1>
+                </div>
+                <div class="admin-card-body">
+                    <form class="admin-form" id="adminSignupForm">
+                        <div class="form-group">
+                            <label for="newAdminUsername">Username</label>
+                            <input type="text" id="newAdminUsername" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newAdminPassword">Password</label>
+                            <input type="password" id="newAdminPassword" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmAdminPassword">Confirm Password</label>
+                            <input type="password" id="confirmAdminPassword" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">Create Account</button>
+                    </form>
+                    <div class="admin-links">
+                        <p>Already have an account? <a href="#" id="goToLogin">Login here</a></p>
+                        <a href="#" class="back-to-home" id="backToHomeFromSignup">← Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-dashboard" id="adminDashboard">
+        <div class="dashboard-header">
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">Internz<span>Learn</span> Admin</a>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Admin Dashboard</h2>
+                    <p>Manage student data and quiz results</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Students</h3>
+                        <div class="stat-value" id="totalStudents">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average Score</h3>
+                        <div class="stat-value" id="averageScore">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Quiz Attempts</h3>
+                        <div class="stat-value" id="quizAttempts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Top Domain</h3>
+                        <div class="stat-value" id="topDomain">-</div>
+                    </div>
+                </div>
+
+                <div class="admin-link-section">
+                    <h3>Admin Access Link</h3>
+                    <p>Share this secure link to access the admin dashboard:</p>
+                    <div class="link-container">
+                        <input type="text" class="link-input" id="adminLink" readonly>
+                        <button class="copy-btn" id="copyLinkBtn">Copy</button>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header">
+                        <h3>Student Data</h3>
+                        <button class="btn" id="exportExcelBtn">Export to Excel</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="studentDataTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Education</th>
+                                    <th>Department</th>
+                                    <th>Year</th>
+                                    <th>Course</th>
+                                    <th>Score</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="quizModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>IT Knowledge Quiz</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="quiz-step active" id="step1">
+                    <h3>Student Information</h3>
+                    <p>Please provide your details and select your course interest to begin the 5-question quiz.</p>
+                    <form id="studentForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="education">Education Qualification</label>
+                            <select id="education" class="form-control" required>
+                                <option value="">Select Education</option>
+                                <option value="High School">High School</option>
+                                <option value="Diploma">Diploma</option>
+                                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                <option value="Master's Degree">Master's Degree</option>
+                                <option value="PhD">PhD</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="department">Department/Major</label>
+                            <input type="text" id="department" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Year of Study/Graduation</label>
+                            <input type="text" id="year" class="form-control" placeholder="e.g., 3rd Year or 2024" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="course">Select Your Course of Interest (Quiz Topic)</label>
+                            <select id="course" class="form-control" required>
+                                <option value="">Select a Course</option>
+                                </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="quiz-step" id="step2">
+                    <div class="quiz-progress">Question 0 of 5</div>
+                    <div id="quizQuestions">
+                        </div>
+                </div>
+
+                <div class="quiz-step" id="step3">
+                    <div class="results">
+                        <h3>Quiz Completed!</h3>
+                        <p>Thank you for completing our Quiz for **<span id="selectedCourseResult"></span>**.</p>
+                        <div class="score">Your Score: <span id="scoreValue">0</span>/5</div>
+                        <p>We'll review your results and contact you with personalized course recommendations.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="prevBtn" style="display: none;">Previous</button>
+                <button class="btn" id="nextBtn">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONSTANTS ---
+        const API_BASE_URL = 'http://localhost:3000/api';
+        const QUESTIONS_PER_QUIZ = 5;
+
+        // --- 24 COURSES WITH 5 QUESTIONS EACH ---
+        const courseQuestionsData = {
+            "ARTIFICIAL INTELLIGENCE": [
+                { question: "What is the primary function of a perceptron in a neural network?", options: ["Data normalization", "Feature extraction", "Binary classification", "Dimensionality reduction"], correct: 2 },
+                { question: "Which algorithm is used for finding the shortest path in a weighted graph, often applied in AI planning?", options: ["Breadth-First Search (BFS)", "A* Search", "Linear Regression", "K-Means Clustering"], correct: 1 },
+                { question: "What is the core difference between General AI (AGI) and Narrow AI (ANI)?", options: ["AGI is faster", "ANI is always software", "AGI can learn any task a human can", "ANI uses more training data"], correct: 2 },
+                { question: "Which technology is primarily used to train large language models (LLMs)?", options: ["Support Vector Machines", "Recurrent Neural Networks (RNNs)", "Transformative Networks", "Decision Trees"], correct: 2 },
+                { question: "In AI, what does 'Overfitting' mean?", options: ["The model is too simple", "The model performs poorly on training data", "The model learns noise and performs poorly on new data", "The data set is too small"], correct: 2 }
+            ],
+            "MACHINE LEARNING": [
+                { question: "Which metric is best suited for evaluating an imbalanced classification dataset?", options: ["Accuracy", "Precision", "F1 Score", "Recall"], correct: 2 },
+                { question: "Which algorithm is an example of unsupervised learning?", options: ["Linear Regression", "K-Nearest Neighbors (KNN)", "Clustering (K-Means)", "Gradient Boosting"], correct: 2 },
+                { question: "What is the primary role of the loss function during model training?", options: ["To speed up computation", "To measure the model's error", "To prevent overfitting", "To normalize input data"], correct: 1 },
+                { question: "What technique modifies input variables to have a mean of zero and a standard deviation of one?", options: ["Feature selection", "One-hot encoding", "Standardization (Z-score)", "Binning"], correct: 2 },
+                { question: "A 'validation set' is primarily used to...", options: ["Train the model parameters", "Tune the model hyperparameters", "Test the final model performance", "Clean the data"], correct: 1 }
+            ],
+            "DATA SCIENCE": [
+                { question: "Which language is most commonly used in Jupyter notebooks for data analysis?", options: ["R", "SQL", "Python", "Java"], correct: 2 },
+                { question: "In statistical terms, what is a variable that is hypothesized to cause or influence another variable?", options: ["Dependent variable", "Confounding variable", "Independent variable", "Categorical variable"], correct: 2 },
+                { question: "What is the process of extracting meaningful patterns from data called?", options: ["Data cleaning", "Data mining", "Data warehousing", "Data visualization"], correct: 1 },
+                { question: "Which type of chart is best for visualizing the relationship between two continuous variables?", options: ["Bar chart", "Pie chart", "Scatter plot", "Histogram"], correct: 2 },
+                { question: "What tool is a highly optimized library for numerical operations on arrays and matrices in Python?", options: ["Pandas", "Matplotlib", "NumPy", "Scikit-learn"], correct: 2 }
+            ],
+            "WEB DEVELOPMENT": [
+                { question: "Which CSS property controls the spacing between lines of text?", options: ["margin", "padding", "line-height", "text-spacing"], correct: 2 },
+                { question: "In JavaScript, what keyword is used to declare a variable that cannot be reassigned?", options: ["var", "let", "const", "static"], correct: 2 },
+                { question: "What is the purpose of an HTML `<meta>` viewport tag?", options: ["SEO optimization", "Loading external scripts", "Controlling the layout on mobile devices", "Defining character set"], correct: 2 },
+                { question: "Which of the following is NOT a JavaScript framework/library?", options: ["React", "Angular", "Vue", "Bootstrap"], correct: 3 },
+                { question: "What HTTP method is idempotent and primarily used to modify an existing resource?", options: ["GET", "POST", "DELETE", "PUT"], correct: 3 }
+            ],
+            "ANDROID DEVELOPMENT": [
+                { question: "What is the primary language recommended by Google for modern Android development?", options: ["Java", "C++", "Kotlin", "Swift"], correct: 2 },
+                { question: "What file format is used to package Android applications?", options: ["JAR", "APK", "EXE", "ZIP"], correct: 1 },
+                { question: "Which component is responsible for presenting the user interface in an Android app?", options: ["Service", "Broadcast Receiver", "Content Provider", "Activity"], correct: 3 },
+                { question: "What layout is used to organize child views in a single row or column?", options: ["ConstraintLayout", "RelativeLayout", "LinearLayout", "GridLayout"], correct: 2 },
+                { question: "In Android, what is an 'Intent' used for?", options: ["Storing data permanently", "Defining UI elements", "Performing operations in the background", "Messaging between components"], correct: 3 }
+            ],
+            "Cloud Computing- AWS": [
+                { question: "What AWS service provides resizable compute capacity in the cloud?", options: ["Amazon S3", "Amazon RDS", "Amazon EC2", "Amazon Lambda"], correct: 2 },
+                { question: "Which model of cloud computing involves renting software over the internet?", options: ["IaaS", "PaaS", "SaaS", "DaaS"], correct: 2 },
+                { question: "What does VPC stand for in the context of AWS?", options: ["Virtual Private Cloud", "Volatile Processing Core", "Verified Primary Client", "Vector Processing Cluster"], correct: 0 },
+                { question: "What is the purpose of an IAM role in AWS?", options: ["To manage network traffic", "To assign permissions to AWS services", "To monitor billing details", "To backup data"], correct: 1 },
+                { question: "Which AWS storage class is best for data that is accessed infrequently but requires rapid retrieval?", options: ["Standard", "Glacier Deep Archive", "Standard-IA (Infrequent Access)", "One Zone-IA"], correct: 2 }
+            ],
+            "Cyber Security": [
+                { question: "What term describes the practice of misleading people into providing sensitive information?", options: ["Brute Force", "Spoofing", "Phishing", "Denial of Service"], correct: 2 },
+                { question: "Which security model dictates that users should only have the minimum privileges necessary to perform their job?", options: ["Zero Trust", "Confidentiality, Integrity, Availability", "Principle of Least Privilege", "Defense in Depth"], correct: 2 },
+                { question: "What is a 'firewall' primarily designed to do?", options: ["Encrypt all outbound data", "Filter network traffic", "Prevent physical theft", "Manage user logins"], correct: 1 },
+                { question: "What is a 'Zero-Day' vulnerability?", options: ["A patch released today", "A vulnerability with no public fix available", "A vulnerability discovered on Jan 1st", "A network intrusion tool"], correct: 1 },
+                { question: "What does the acronym 'DDoS' stand for?", options: ["Digital Data Operation System", "Distributed Denial of Service", "Dynamic Data Security", "Deep Domain Optimization Service"], correct: 1 }
+            ],
+            "Java": [
+                { question: "Java is an object-oriented, class-based language. What concept is related to achieving runtime polymorphism?", options: ["Method Overloading", "Encapsulation", "Inheritance", "Method Overriding"], correct: 3 },
+                { question: "What is the purpose of the Java Virtual Machine (JVM)?", options: ["To compile Java code", "To provide a runtime environment", "To manage database connections", "To design the GUI"], correct: 1 },
+                { question: "Which keyword is used to prevent a method from being overridden?", options: ["abstract", "static", "final", "public"], correct: 2 },
+                { question: "What is the default value of a local variable in Java?", options: ["0", "null", "depends on data type", "undefined"], correct: 3 },
+                { question: "Which collection class allows you to store elements in a unique, unordered set?", options: ["ArrayList", "HashMap", "HashSet", "LinkedList"], correct: 2 }
+            ],
+            "Python": [
+                { question: "Which Python data type is ordered, immutable, and allows duplicate members?", options: ["List", "Set", "Dictionary", "Tuple"], correct: 3 },
+                { question: "What does the `pip` command primarily do in Python development?", options: ["Run scripts", "Install packages", "Debug code", "Create virtual environments"], correct: 1 },
+                { question: "Which keyword is used to exit a loop early?", options: ["stop", "break", "return", "pass"], correct: 1 },
+                { question: "What is a Python file containing function definitions and statements called?", options: ["Class", "Module", "Script", "Package"], correct: 1 },
+                { question: "How do you define a block of code (like a loop or function) in Python?", options: ["Parentheses ()", "Curly braces {}", "Semicolons ;", "Indentation"], correct: 3 }
+            ],
+            "Embedded System": [
+                { question: "Which component is often considered the 'brain' of an embedded system?", options: ["RAM", "ROM", "Microcontroller", "Sensor"], correct: 2 },
+                { question: "What is the main advantage of using an RTOS (Real-Time Operating System) in embedded systems?", options: ["Unlimited memory", "Faster internet connection", "Guaranteed task timing", "Easier programming"], correct: 2 },
+                { question: "Which programming language is most dominant for low-level programming in embedded systems?", options: ["Python", "C/C++", "Java", "Assembly"], correct: 1 },
+                { question: "What does 'GPIO' stand for?", options: ["General Processor Input/Output", "Global Program Interrupt Origin", "General Purpose Input/Output", "Graphical Peripheral Interface Object"], correct: 2 },
+                { question: "Which type of memory is volatile (loses data when power is off)?", options: ["Flash Memory", "EEPROM", "SRAM (Static RAM)", "ROM"], correct: 2 }
+            ],
+            "Internet of Things": [
+                { question: "What are the three core layers of the IoT architecture?", options: ["Web, App, Data", "Perception, Network, Application", "Sensor, Cloud, User", "Hardware, Software, Firmware"], correct: 1 },
+                { question: "Which communication protocol is lightweight and often used for IoT messaging due to low bandwidth requirements?", options: ["HTTP", "FTP", "MQTT", "SMTP"], correct: 2 },
+                { question: "What is the primary role of the 'Gateway' in an IoT system?", options: ["Process data at the edge", "Manage user logins", "Store large amounts of data", "Connect local devices to the internet"], correct: 3 },
+                { question: "What is 'Edge Computing' in the context of IoT?", options: ["Running processes on a cloud server", "Processing data close to the source", "Using only low-power devices", "Connecting devices via satellite"], correct: 1 },
+                { question: "Which wireless technology is most suitable for low-power, wide-area IoT applications?", options: ["Bluetooth", "Wi-Fi", "Zigbee", "LoRaWAN"], correct: 3 }
+            ],
+            "Hybrid Electric Vehicle": [
+                { question: "What is the main function of the 'Regenerative Braking' system in an HEV?", options: ["To increase engine power", "To convert heat into electricity", "To recharge the battery during deceleration", "To reduce the vehicle's weight"], correct: 2 },
+                { question: "Which HEV configuration allows the engine and electric motor to separately or jointly drive the wheels?", options: ["Series Hybrid", "Parallel Hybrid", "Series-Parallel Hybrid (Power-Split)", "Mild Hybrid"], correct: 1 },
+                { question: "What does the 'ICE' stand for in HEV technology?", options: ["Inter-Cooling Engine", "Insulated Central Electronics", "Internal Combustion Engine", "Integrated Current Equipment"], correct: 2 },
+                { question: "The primary battery type used in most modern HEVs and EVs is:", options: ["Lead-Acid", "Nickel-Metal Hydride (NiMH)", "Lithium-ion", "Alkaline"], correct: 2 },
+                { question: "In a Mild Hybrid Electric Vehicle (MHEV), the electric motor primarily serves as a:", options: ["Primary driving force", "Full-time battery charger", "Starter/Generator (e-motor/boost)", "Heater"], correct: 2 }
+            ],
+            "Robotics": [
+                { question: "What is the term for a robot's workspace, defined by the reach of its arm?", options: ["Accuracy", "Repeatability", "Kinematics", "Envelope/Workspace"], correct: 3 },
+                { question: "Which type of joint provides a rotational degree of freedom in a robot arm?", options: ["Prismatic (P)", "Revolute (R)", "Spherical (S)", "Cylindrical (C)"], correct: 1 },
+                { question: "What is the primary input device for a vision-guided robot?", options: ["Encoder", "Proximity sensor", "Camera/Vision System", "Force sensor"], correct: 2 },
+                { question: "What is the goal of Inverse Kinematics?", options: ["Calculate the position of the end-effector", "Determine the joint angles for a desired end-effector position", "Increase the robot's speed", "Program the robot's path"], correct: 1 },
+                { question: "Which control system ensures the robot maintains a set position or velocity despite external disturbances?", options: ["Open-loop control", "Kinematic control", "Feedback (Closed-loop) control", "Direct control"], correct: 2 }
+            ],
+            "AutoCAD": [
+                { question: "What command is used to create parallel copies of lines or curves in AutoCAD?", options: ["COPY", "MOVE", "OFFSET", "ARRAY"], correct: 2 },
+                { question: "What file extension is used for the standard AutoCAD drawing file?", options: [".DGN", ".DWG", ".DXF", ".STL"], correct: 1 },
+                { question: "What is the process of joining multiple non-continuous lines/arcs into a single polyline?", options: ["TRIM", "EXTEND", "JOIN (PEDIT)", "FILLET"], correct: 2 },
+                { question: "What is the coordinate system that is fixed in space, and cannot be moved or rotated?", options: ["WCS (World Coordinate System)", "UCS (User Coordinate System)", "Relative Coordinates", "Polar Coordinates"], correct: 0 },
+                { question: "Which command is used to shorten an object to meet the edges of other objects?", options: ["EXTEND", "TRIM", "BREAK", "CHAMFER"], correct: 1 }
+            ],
+            "Construction Planning": [
+                { question: "What does the acronym 'CPM' stand for in construction project management?", options: ["Cost Per Man-hour", "Critical Path Method", "Construction Planning Model", "Central Project Management"], correct: 1 },
+                { question: "The document that outlines the health and safety procedures for a construction project is typically called the:", options: ["Permit to Work", "Quality Assurance Plan", "Method Statement", "HSE Plan"], correct: 3 },
+                { question: "What is 'Float' in a CPM network diagram?", options: ["The total duration of the project", "The time an activity can be delayed without delaying the project finish date", "The cost overrun of the project", "The resource allocation period"], correct: 1 },
+                { question: "Which contractual document sets the scope of work, timeline, and deliverables?", options: ["Submittal", "Purchase Order", "Contract/Agreement", "Change Order"], correct: 2 },
+                { question: "The process of determining the resources (labor, equipment, materials) needed for an activity is known as:", options: ["Cost control", "Activity Sequencing", "Resource Estimation", "Risk Analysis"], correct: 2 }
+            ],
+            "IC Engine Design": [
+                { question: "What is the primary purpose of the flywheel in an IC engine?", options: ["Increase engine speed", "Balance the piston mass", "Smooth out engine power fluctuations", "Cool the cylinder head"], correct: 2 },
+                { question: "What cycle describes the operation of a gasoline (petrol) engine?", options: ["Diesel Cycle", "Brayton Cycle", "Otto Cycle", "Rankine Cycle"], correct: 2 },
+                { question: "What is 'TDC' in relation to piston motion?", options: ["Total Displacement Clearance", "Top Dead Center", "Thermal Dynamic Control", "Tire Drive Connection"], correct: 1 },
+                { question: "The ratio of the volume above the piston at BDC to the volume above the piston at TDC is known as the:", options: ["Swept volume", "Clearance volume", "Compression Ratio", "Stroke length"], correct: 2 },
+                { question: "What component transfers the reciprocating motion of the piston into rotary motion?", options: ["Camshaft", "Connecting rod and Crankshaft", "Valve train", "Intake Manifold"], correct: 1 }
+            ],
+            "Human Resources": [
+                { question: "Which HR function involves the entire process from identifying a vacancy to filling it with a new employee?", options: ["Performance Management", "Training and Development", "Recruitment and Selection", "Compensation and Benefits"], correct: 2 },
+                { question: "What does 'KRA' stand for in the context of employee performance evaluation?", options: ["Key Resource Allocation", "Knowledge Retention Assessment", "Key Responsibility Area", "Known Risk Analysis"], correct: 2 },
+                { question: "What legal principle governs equal pay for equal work, regardless of gender or other protected characteristics?", options: ["Affirmative Action", "Workforce Diversity", "Equal Pay Act/Equal Employment Opportunity", "Job Analysis"], correct: 2 },
+                { question: "The process of providing new employees with the necessary information and social knowledge to perform their jobs effectively is called:", options: ["Training", "Mentoring", "Induction/Onboarding", "Skill Assessment"], correct: 2 },
+                { question: "What is the main purpose of a 'Job Description'?", options: ["To define salary structure", "To outline the duties, responsibilities, and required skills for a role", "To manage employee benefits", "To set performance goals"], correct: 1 }
+            ],
+            "Finance": [
+                { question: "What is the term for the percentage of a loan or deposit charged as interest over a period?", options: ["Principal", "Maturity", "Interest Rate", "Dividend"], correct: 2 },
+                { question: "In accounting, the equation that must always balance is: Assets = ?", options: ["Revenue - Expenses", "Liabilities + Equity", "Cash Flow + Inventory", "Debt - Income"], correct: 1 },
+                { question: "What does 'NPV' stand for in financial decision-making?", options: ["Net Profit Variance", "Nominal Price Value", "Non-Performing Venture", "Net Present Value"], correct: 3 },
+                { question: "Which financial statement shows a company's revenues and expenses over a specific period?", options: ["Balance Sheet", "Statement of Cash Flows", "Income Statement", "Statement of Retained Earnings"], correct: 2 },
+                { question: "What is 'Working Capital'?", options: ["Total assets minus total liabilities", "Current Assets minus Current Liabilities", "Long-term debt", "Net fixed assets"], correct: 1 }
+            ],
+            "Sales & Marketing": [
+                { question: "What is the term for the set of marketing tools a firm uses to implement its marketing strategy (The 4 Ps)?", options: ["Market Segmentation", "SWOT Analysis", "Marketing Mix", "Customer Relationship Management"], correct: 2 },
+                { question: "What does CRM stand for?", options: ["Corporate Risk Management", "Creative Resource Management", "Customer Relationship Management", "Client Retention Metrics"], correct: 2 },
+                { question: "The process of dividing a market into distinct groups who might require separate products or marketing mixes is:", options: ["Market Targeting", "Market Positioning", "Market Segmentation", "Product Differentiation"], correct: 2 },
+                { question: "What is a 'Lead' in sales terms?", options: ["A confirmed customer order", "A potential customer who has shown interest", "An existing client account", "A discounted product"], correct: 1 },
+                { question: "Which sales technique focuses on building long-term, mutually beneficial relationships with customers?", options: ["Transactional Selling", "Consultative Selling", "Relational Selling", "Aggressive Selling"], correct: 2 }
+            ],
+            "Digital Marketing": [
+                { question: "What does 'SEO' primarily aim to achieve?", options: ["Paid advertising clicks", "High ranking in organic search engine results", "Social media engagement", "Email automation"], correct: 1 },
+                { question: "What is 'PPC' (Pay-Per-Click) in digital marketing?", options: ["An unpaid ad model", "A model where advertisers pay when their ad is clicked", "A fixed monthly fee model", "A social media engagement metric"], correct: 1 },
+                { question: "What is a 'Conversion' in the context of a marketing campaign?", options: ["A website visit", "An action a visitor takes that fulfills the goal (e.g., purchase, sign-up)", "An ad impression", "An email open rate"], correct: 1 },
+                { question: "Which metric measures the percentage of people who click on an advertisement after seeing it?", options: ["Impression Rate (IR)", "Conversion Rate (CR)", "Click-Through Rate (CTR)", "Bounce Rate (BR)"], correct: 2 },
+                { question: "What is 'A/B Testing'?", options: ["Testing two different products", "Testing two different versions of a webpage/ad against each other", "Testing mobile vs desktop performance", "Testing ad placements"], correct: 1 }
+            ],
+            "Stock Market": [
+                { question: "What is a 'Bull Market'?", options: ["A period of falling stock prices", "A period of rising stock prices", "A market only for agricultural goods", "A market with low trading volume"], correct: 1 },
+                { question: "What type of stock typically pays high dividends and is considered low-risk?", options: ["Growth Stock", "Blue Chip Stock", "Penny Stock", "Tech Stock"], correct: 1 },
+                { question: "What is 'Diversification' in investment?", options: ["Investing only in one sector", "Spreading investments across various assets", "Selling all stocks quickly", "Focusing only on high-risk stocks"], correct: 1 },
+                { question: "What measure indicates the volatility of a stock compared to the overall market?", options: ["P/E Ratio", "Dividend Yield", "Beta", "EPS"], correct: 2 },
+                { question: "A security that represents ownership in a corporation is called a:", options: ["Bond", "Commodity", "Derivative", "Stock (or Equity)"], correct: 3 }
+            ],
+            "Industrial Biotechnology": [
+                { question: "Which type of microorganism is most commonly used in industrial fermentation processes?", options: ["Viruses", "Algae", "Bacteria and Yeast", "Mammalian cells"], correct: 2 },
+                { question: "What is 'Bioremediation'?", options: ["Using light to grow organisms", "Using living organisms to remove pollutants", "Creating new synthetic cells", "Genetic engineering of crops"], correct: 1 },
+                { question: "What is the primary product of anaerobic fermentation in yeast?", options: ["Methane and Water", "Lactic Acid", "Ethanol and Carbon Dioxide", "Amino Acids"], correct: 2 },
+                { question: "The process of inserting a gene from one organism into another to change its traits is called:", options: ["Cell Culture", "Polymerase Chain Reaction (PCR)", "Genetic Engineering", "Chromatography"], correct: 2 },
+                { question: "Which term describes a cell's ability to divide indefinitely and differentiate into specialized cell types?", options: ["Senescence", "Aneuploidy", "Totipotency/Pluripotency", "Apoptosis"], correct: 2 }
+            ],
+            "Psychology": [
+                { question: "Which psychological perspective emphasizes observable behavior and its relationship with environmental stimuli?", options: ["Psychoanalytic", "Cognitive", "Humanistic", "Behaviorism"], correct: 3 },
+                { question: "What part of the brain is primarily responsible for forming new memories?", options: ["Frontal Lobe", "Cerebellum", "Hippocampus", "Amygdala"], correct: 2 },
+                { question: "In classical conditioning, what is the naturally occurring response to an unconditioned stimulus?", options: ["Conditioned Stimulus (CS)", "Conditioned Response (CR)", "Unconditioned Stimulus (UCS)", "Unconditioned Response (UCR)"], correct: 3 },
+                { question: "What does the 'Big Five' model in personality psychology measure?", options: ["Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness", "Id, Ego, Superego", "Intelligence, Memory, Logic, Creativity, Speed", "Physical, Emotional, Social, Spiritual, Intellectual Health"], correct: 0 },
+                { question: "The mental processes involved in gaining knowledge and understanding are referred to as:", options: ["Affect", "Cognition", "Perception", "Emotion"], correct: 1 }
+            ],
+            "Medical Coding": [
+                { question: "Which standardized code set is primarily used in the U.S. to report diseases, injuries, and health conditions?", options: ["CPT", "HCPCS Level II", "ICD-10-CM", "NDC"], correct: 2 },
+                { question: "What does 'CPT' stand for in medical coding?", options: ["Certified Practice Technician", "Clinical Procedure Terminology", "Current Procedural Terminology", "Code Processing Time"], correct: 2 },
+                { question: "In medical billing, the claim form used for physician services is typically the:", options: ["UB-04", "CMS-1500", "EHR form", "HCPCS Form"], correct: 1 },
+                { question: "What modifier is used to report a service that was performed by a resident under the supervision of a teaching physician?", options: ["-25", "-59", "-80", "-GC"], correct: 3 },
+                { question: "What is the main purpose of the HIPAA legislation in relation to medical coding?", options: ["To standardize coding systems across the country", "To set minimum wage for coders", "To ensure patient privacy and security of health information", "To manage hospital accreditation"], correct: 2 }
+            ],
+            "VLSI": [
+                { question: "What technology allows hundreds of thousands of transistors to be consolidated onto a single chip?", options: ["LSI", "VLSI", "ULSI", "SSI"], correct: 1 },
+                { question: "Which design style is typically used for high-speed, low-power digital circuits?", options: ["CMOS (Complementary MOS)", "BJT", "NMOS", "PMOS"], correct: 0 },
+                { question: "What is the primary function of the 'layout' phase in the VLSI design flow?", options: ["Logic synthesis", "Transistor placement and routing", "Design verification", "Behavioral modeling"], correct: 1 },
+                { question: "What is the minimum feature size of a transistor (e.g., 28nm, 7nm) often referred to as?", options: ["Die Size", "Yield", "Technology Node", "Gate Pitch"], correct: 2 },
+                { question: "What does 'EDA' stand for in the context of VLSI design?", options: ["Electronic Design Automation", "Embedded Device Architecture", "Electrical Data Analysis", "External Device Application"], correct: 0 }
+            ],
+            "Agricultural Technology": [
+                { question: "What technology uses aerial imagery and sensor data to optimize resource management in farming?", options: ["Vertical Farming", "Hydroponics", "Precision Agriculture", "Organic Farming"], correct: 2 },
+                { question: "Which nutrient is essential for plant growth and is often the primary component of fertilizer (N)?", options: ["Phosphorus", "Potassium", "Nitrogen", "Calcium"], correct: 2 },
+                { question: "What is the primary goal of genetically modifying crops (GMOs)?", options: ["Increase water consumption", "Reduce shelf life", "Enhance traits like pest resistance or yield", "Require less sunlight"], correct: 2 },
+                { question: "What is the term for growing crops without soil, using mineral nutrient solutions in a water solvent?", options: ["Aeroponics", "Aquaculture", "Hydroponics", "Permaculture"], correct: 2 },
+                { question: "Which sensor is most commonly used to measure the water content available to plants in the soil?", options: ["pH sensor", "Temperature sensor", "Moisture sensor", "Light sensor"], correct: 2 }
+            ],
+            "Biochemistry": [
+                { question: "What is the main energy currency molecule in the cell?", options: ["Glucose", "DNA", "ATP", "Lipid"], correct: 2 },
+                { question: "Which class of macromolecules includes enzymes that catalyze biochemical reactions?", options: ["Carbohydrates", "Lipids", "Proteins", "Nucleic Acids"], correct: 2 },
+                { question: "What process converts DNA's genetic information into a messenger RNA (mRNA) molecule?", options: ["Translation", "Replication", "Transcription", "Polymerization"], correct: 2 },
+                { question: "What is the fundamental building block of proteins?", options: ["Fatty Acids", "Nucleotides", "Amino Acids", "Monosaccharides"], correct: 2 },
+                { question: "The process by which a protein loses its native shape and becomes biologically inactive is called:", options: ["Hydrolysis", "Denaturation", "Synthesis", "Activation"], correct: 1 }
+            ],
+            "Geographic Information Systems": [
+                { question: "What does 'GIS' stand for?", options: ["Global Internet System", "Geographic Information System", "Geological Inventory Software", "Government Intelligence Satellite"], correct: 1 },
+                { question: "In GIS, a raster data model represents geographic features using:", options: ["Points and lines", "Vectors and polygons", "Grids and cells (pixels)", "Tables and databases"], correct: 2 },
+                { question: "Which device is primarily used to determine the exact latitude, longitude, and altitude of a point on Earth?", options: ["Telescope", "Total Station", "GPS Receiver", "Barometer"], correct: 2 },
+                { question: "What is a 'Layer' in a GIS map?", options: ["A sheet of paper", "A database table", "A collection of geographic features of the same type", "A zoom level"], correct: 2 },
+                { question: "The process of linking a map image to known real-world coordinates is called:", options: ["Digitizing", "Projection", "Georeferencing", "Topology"], correct: 2 }
+            ],
+            "Urban Planning": [
+                { question: "What regulatory tool divides a municipality into different areas specifying land use (residential, commercial, industrial)?", options: ["Eminent Domain", "Zoning Ordinance", "Building Code", "Master Plan"], correct: 1 },
+                { question: "What is 'Gentrification'?", options: ["Building large city parks", "The process of wealthier people moving into an area, displacing lower-income residents", "Improving public transit", "Creating affordable housing"], correct: 1 },
+                { question: "The concept of designing cities to be accessible and usable by all people, regardless of age or disability, is called:", options: ["Smart Growth", "Sustainable Development", "Universal Design", "Mixed-Use Zoning"], correct: 2 },
+                { question: "A document that sets out a municipality's future goals and policies for development is the:", options: ["Permit application", "Environmental impact statement", "Master Plan (Comprehensive Plan)", "Deed Restriction"], correct: 2 },
+                { question: "What is the primary purpose of 'Mixed-Use Zoning'?", options: ["To segregate different land uses", "To combine residential, commercial, and/or industrial uses in a single area", "To restrict high-rise buildings", "To promote single-family housing"], correct: 1 }
+            ]
+        };
+
+        // DOM Elements
+        const courseSelect = document.getElementById('course');
+        const selectedCourseResult = document.getElementById('selectedCourseResult');
+        const mainWebsite = document.getElementById('mainWebsite');
+        const adminLoginPage = document.getElementById('adminLoginPage');
+        const adminSignupPage = document.getElementById('adminSignupPage');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const adminSignupBtn = document.getElementById('adminSignupBtn');
+        const goToSignup = document.getElementById('goToSignup');
+        const goToLogin = document.getElementById('goToLogin');
+        const backToHomeFromLogin = document.getElementById('backToHomeFromLogin');
+        const backToHomeFromSignup = document.getElementById('backToHomeFromSignup');
+        const quizBtn = document.getElementById('quizBtn');
+        const quizModal = document.getElementById('quizModal');
+        const closeBtns = document.querySelectorAll('.close-btn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const steps = document.querySelectorAll('.quiz-step');
+        const quizQuestionsContainer = document.getElementById('quizQuestions');
+        const studentForm = document.getElementById('studentForm');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const adminSignupForm = document.getElementById('adminSignupForm');
+        const scoreValue = document.getElementById('scoreValue');
+        const exportExcelBtn = document.getElementById('exportExcelBtn');
+        const studentTableBody = document.getElementById('studentTableBody');
+        const totalStudents = document.getElementById('totalStudents');
+        const averageScore = document.getElementById('averageScore');
+        const quizAttempts = document.getElementById('quizAttempts');
+        const topDomain = document.getElementById('topDomain');
+        const adminLink = document.getElementById('adminLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const quizProgressText = document.querySelector('.quiz-progress');
+
+
+        // Quiz State
+        let currentStep = 0;
+        let selectedQuestions = []; // Holds the 5 questions for the selected course
+        let userAnswers = []; // Answers for the currently selected 5 questions
+        let studentData = {};
+        let allStudentData = []; 
+
+        // --- Core Functions ---
+
+        function populateCourseDropdown() {
+            const courses = Object.keys(courseQuestionsData).sort();
+            courses.forEach(course => {
+                const option = document.createElement('option');
+                option.value = course;
+                option.textContent = course;
+                courseSelect.appendChild(option);
+            });
+        }
+        
+        // Navigation Functions
+        function showMainWebsite() {
+            mainWebsite.style.display = 'block';
+            adminLoginPage.style.display = 'none';
+            adminSignupPage.style.display = 'none';
+            adminDashboard.style.display = 'none';
+        }
+
+        function showAdminLoginPage() {
+            mainWebsite.style.display = 'none';
+            adminLoginPage.style.display = 'block';
+            adminSignupPage.style.display = 'none';
+            adminDashboard.style.display = 'none';
+        }
+
+        function showAdminSignupPage() {
+            mainWebsite.style.display = 'none';
+            adminLoginPage.style.display = 'none';
+            adminSignupPage.style.display = 'block';
+            adminDashboard.style.display = 'none';
+        }
+
+        function showAdminDashboard() {
+            mainWebsite.style.display = 'none';
+            adminLoginPage.style.display = 'none';
+            adminSignupPage.style.display = 'none';
+            adminDashboard.style.display = 'block';
+        }
+
+        // Quiz Modal Functions
+        function openQuizModal() {
+            quizModal.style.display = 'block';
+            resetQuiz();
+        }
+
+        function closeAllModals() {
+            quizModal.style.display = 'none';
+        }
+
+        function resetQuiz() {
+            currentStep = 0;
+            selectedQuestions = [];
+            userAnswers = new Array(QUESTIONS_PER_QUIZ).fill(null);
+            studentData = {};
+            studentForm.reset(); 
+            quizQuestionsContainer.innerHTML = '';
+            updateStepDisplay();
+        }
+
+        function updateStepDisplay() {
+            steps.forEach(step => step.classList.remove('active'));
+            steps[currentStep].classList.add('active');
+            prevBtn.style.display = currentStep === 0 ? 'none' : 'block';
+            
+            if (currentStep === 0) {
+                nextBtn.textContent = 'Start Quiz';
+                quizProgressText.style.display = 'none';
+            } else if (currentStep === 1) {
+                nextBtn.textContent = 'Submit Quiz';
+                quizProgressText.style.display = 'block';
+
+                if (quizQuestionsContainer.innerHTML === '') {
+                    renderQuestions();
+                }
+
+                const answeredCount = userAnswers.filter(a => a !== null).length;
+                quizProgressText.textContent = `Question ${answeredCount} of ${QUESTIONS_PER_QUIZ}`;
+            } else if (currentStep === 2) {
+                nextBtn.textContent = 'Close';
+                quizProgressText.style.display = 'none';
+                calculateScore();
+            }
+        }
+
+        function goToPrevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        function goToNextStep() {
+            if (currentStep === 0) {
+                if (!validateStudentForm()) {
+                    alert('Please fill in all required fields and select a course.');
+                    return;
+                }
+                saveStudentData();
+
+                const courseName = studentData.course;
+                selectedQuestions = courseQuestionsData[courseName];
+                userAnswers = new Array(selectedQuestions.length).fill(null);
+
+                selectedCourseResult.textContent = courseName; 
+
+                currentStep++;
+            } else if (currentStep === 1) {
+                if (userAnswers.includes(null)) {
+                    alert(`Please answer all ${QUESTIONS_PER_QUIZ} questions before submitting.`);
+                    return;
+                }
+                currentStep++;
+            } else if (currentStep === 2) {
+                closeAllModals();
+                return;
+            }
+            updateStepDisplay();
+        }
+
+        function validateStudentForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const education = document.getElementById('education').value;
+            const department = document.getElementById('department').value;
+            const year = document.getElementById('year').value;
+            const course = document.getElementById('course').value;
+            
+            return name && email && phone && education && department && year && course;
+        }
+
+        function saveStudentData() {
+            studentData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                education: document.getElementById('education').value,
+                department: document.getElementById('department').value,
+                year: document.getElementById('year').value,
+                course: document.getElementById('course').value,
+            };
+        }
+
+        function renderQuestions() {
+            quizQuestionsContainer.innerHTML = '';
+            
+            selectedQuestions.forEach((question, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.id = `q-${index}`;
+
+                const questionTitle = document.createElement('h3');
+                questionTitle.textContent = `Q${index + 1}: ${question.question}`;
+                questionElement.appendChild(questionTitle);
+                
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options';
+                
+                question.options.forEach((option, optionIndex) => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    if (userAnswers[index] === optionIndex) {
+                        optionElement.classList.add('selected');
+                    }
+                    
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = `question-${index}`;
+                    radioInput.value = optionIndex;
+                    radioInput.checked = userAnswers[index] === optionIndex;
+                    
+                    const optionLabel = document.createElement('label');
+                    optionLabel.textContent = option;
+                    
+                    optionElement.addEventListener('click', () => {
+                        userAnswers[index] = optionIndex;
+                        const allOptions = questionElement.querySelectorAll('.option');
+                        allOptions.forEach(opt => opt.classList.remove('selected'));
+                        optionElement.classList.add('selected');
+                        radioInput.checked = true;
+
+                        const answeredCount = userAnswers.filter(a => a !== null).length;
+                        quizProgressText.textContent = `Question ${answeredCount} of ${QUESTIONS_PER_QUIZ}`;
+                    });
+                    
+                    optionElement.appendChild(radioInput);
+                    optionElement.appendChild(optionLabel);
+                    optionsContainer.appendChild(optionElement);
+                });
+                
+                questionElement.appendChild(optionsContainer);
+                quizQuestionsContainer.appendChild(questionElement);
+            });
+            
+            updateStepDisplay(); 
+        }
+
+        // --- BACKEND API INTERACTION ---
+
+        async function calculateScore() {
+            let score = 0;
+            
+            selectedQuestions.forEach((question, index) => {
+                if (userAnswers[index] === question.correct) {
+                    score++;
+                }
+            });
+            
+            scoreValue.textContent = score;
+            
+            studentData.score = score;
+            studentData.maxScore = QUESTIONS_PER_QUIZ;
+            studentData.quizDomain = studentData.course;
+            studentData.timestamp = new Date().toISOString(); 
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/quiz/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(studentData)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server returned status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log("Server response:", result.message);
+                
+            } catch (error) {
+                console.error("Error submitting quiz:", error);
+                alert('Could not submit quiz data to the server. Check if the backend is running on port 3000.');
+            }
+        }
+
+        async function loginAdmin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showAdminDashboard();
+                    loadStudentData();
+                    adminLoginForm.reset();
+                } else {
+                    alert('Invalid username or password. Use Username: admin, Password: password123');
+                }
+
+            } catch (error) {
+                console.error("Admin Login Error:", error);
+                alert('Could not connect to the admin server.');
+            }
+        }
+
+        async function loadStudentData() {
+            studentTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Loading data from server...</td></tr>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/admin/data`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch student data from server.');
+                }
+
+                const data = await response.json();
+                allStudentData = data.students || [];
+                
+                if (allStudentData.length === 0) {
+                    studentTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No student data available on server</td></tr>';
+                    totalStudents.textContent = 0;
+                    averageScore.textContent = '0%';
+                    quizAttempts.textContent = 0;
+                    topDomain.textContent = '-';
+                    return;
+                }
+                
+                studentTableBody.innerHTML = '';
+                let totalScore = 0;
+                let domainCounts = {};
+                
+                allStudentData.forEach(student => {
+                    const row = document.createElement('tr');
+                    const maxScore = student.maxScore || QUESTIONS_PER_QUIZ;
+                    
+                    row.innerHTML = `
+                        <td>${student.name}</td>
+                        <td>${student.email}</td>
+                        <td>${student.phone}</td>
+                        <td>${student.education}</td>
+                        <td>${student.department}</td>
+                        <td>${student.year}</td> 
+                        <td>${student.course}</td> 
+                        <td>${student.score}/${maxScore}</td>
+                        <td>${new Date(student.timestamp).toLocaleDateString()}</td>
+                    `;
+                    
+                    studentTableBody.appendChild(row);
+                    totalScore += student.score;
+                    
+                    const course = student.course;
+                    if (course) {
+                        if (!domainCounts[course]) {
+                            domainCounts[course] = 0;
+                        }
+                        domainCounts[course]++;
+                    }
+                });
+                
+                const maxTotalScore = allStudentData.length * QUESTIONS_PER_QUIZ;
+                
+                totalStudents.textContent = allStudentData.length;
+                averageScore.textContent = `${Math.round((totalScore / maxTotalScore) * 100)}%`;
+                quizAttempts.textContent = allStudentData.length;
+                
+                let topDomainName = '-';
+                let maxCount = 0;
+                Object.keys(domainCounts).forEach(domain => {
+                    if (domainCounts[domain] > maxCount) {
+                        maxCount = domainCounts[domain];
+                        topDomainName = domain;
+                    }
+                });
+                topDomain.textContent = topDomainName;
+
+            } catch (error) {
+                console.error("Error loading student data:", error);
+                studentTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--accent);">Failed to connect to backend server.</td></tr>';
+            }
+        }
+
+        function signupAdmin(e) {
+            e.preventDefault();
+            const password = document.getElementById('newAdminPassword').value;
+            const confirmPassword = document.getElementById('confirmAdminPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match');
+                return;
+            }
+            
+            alert('Admin account creation is simulated. You can now login using username: admin, password: password123');
+            showAdminLoginPage();
+            adminSignupForm.reset();
+        }
+
+        function logoutAdmin() { showMainWebsite(); }
+
+        function exportToExcel() {
+            if (allStudentData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            const excelData = [
+                ['Name', 'Email', 'Phone', 'Education', 'Department', 'Year', 'Course', 'Score', 'Date']
+            ];
+            
+            allStudentData.forEach(student => {
+                const maxScore = student.maxScore || QUESTIONS_PER_QUIZ;
+                excelData.push([
+                    student.name, student.email, student.phone, student.education,
+                    student.department, student.year, student.course, `${student.score}/${maxScore}`, new Date(student.timestamp).toLocaleDateString()
+                ]);
+            });
+            
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Student Data');
+            XLSX.writeFile(wb, 'InternzLearn_Student_Data.xlsx');
+        }
+
+        function generateAdminLink() {
+            const currentUrl = window.location.href.split('?')[0];
+            return `${currentUrl}?admin=true`;
+        }
+
+        function checkAdminAccess() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true') {
+                showAdminLoginPage();
+            }
+        }
+
+        function copyAdminLink() {
+            adminLink.select();
+            document.execCommand('copy');
+            alert('Admin link copied to clipboard!');
+        }
+
+
+        // Event Listeners
+        adminLoginBtn.addEventListener('click', showAdminLoginPage);
+        adminSignupBtn.addEventListener('click', showAdminSignupPage);
+        goToSignup.addEventListener('click', (e) => { e.preventDefault(); showAdminSignupPage(); });
+        goToLogin.addEventListener('click', (e) => { e.preventDefault(); showAdminLoginPage(); });
+        backToHomeFromLogin.addEventListener('click', (e) => { e.preventDefault(); showMainWebsite(); });
+        backToHomeFromSignup.addEventListener('click', (e) => { e.preventDefault(); showMainWebsite(); });
+        quizBtn.addEventListener('click', openQuizModal);
+        logoutBtn.addEventListener('click', logoutAdmin);
+        closeBtns.forEach(btn => btn.addEventListener('click', closeAllModals));
+        prevBtn.addEventListener('click', goToPrevStep);
+        nextBtn.addEventListener('click', goToNextStep);
+        adminLoginForm.addEventListener('submit', loginAdmin);
+        adminSignupForm.addEventListener('submit', signupAdmin);
+        exportExcelBtn.addEventListener('click', exportToExcel);
+        copyLinkBtn.addEventListener('click', copyAdminLink);
+
+        // Initialize the application
+        function init() {
+            populateCourseDropdown();
+            adminLink.value = generateAdminLink();
+            checkAdminAccess();
+        }
+        init();
+    </script>
+</body>
+</html>
